@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI SUPER PREDICTOR — Admin</title>
+
+<style>
+:root{
+  --bg:#050816;--bg2:#0a1024;--card:rgba(13,20,42,.72);--card2:rgba(20,30,58,.78);
+  --text:#f5f7ff;--muted:#8d9bb8;--line:rgba(120,150,255,.18);
+  --cyan:#22d3ee;--blue:#6366f1;--purple:#a855f7;--green:#22c55e;--red:#ef4444;--gold:#f59e0b;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+ margin:0;color:var(--text);font-family:Inter,Arial,sans-serif;min-height:100vh;overflow-x:hidden;
+ background:
+ radial-gradient(circle at 15% 10%,rgba(34,211,238,.15),transparent 28%),
+ radial-gradient(circle at 85% 15%,rgba(168,85,247,.18),transparent 30%),
+ radial-gradient(circle at 50% 100%,rgba(99,102,241,.14),transparent 35%),
+ linear-gradient(135deg,#030611,#080d1e 45%,#050816);
+ position:relative;
+}
+body:before{
+ content:"";position:fixed;inset:0;pointer-events:none;opacity:.20;
+ background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+ background-size:42px 42px;mask-image:linear-gradient(to bottom,black,transparent 90%);
+}
+body:after{
+ content:"";position:fixed;width:420px;height:420px;border-radius:50%;left:-180px;top:20%;
+ background:rgba(34,211,238,.12);filter:blur(80px);pointer-events:none;animation:floatGlow 9s ease-in-out infinite alternate;
+}
+@keyframes floatGlow{to{transform:translate(80px,90px) scale(1.25);opacity:.55}}
+@keyframes pulse{50%{box-shadow:0 0 0 6px rgba(34,211,238,.04),0 0 35px rgba(34,211,238,.22)}}
+@keyframes shimmer{0%{background-position:-500px 0}100%{background-position:500px 0}}
+header{
+ height:72px;position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;
+ padding:0 24px;background:rgba(4,8,22,.72);backdrop-filter:blur(20px);border-bottom:1px solid var(--line);
+ box-shadow:0 10px 35px rgba(0,0,0,.28)
+}
+.logo{
+ font-size:19px;font-weight:900;letter-spacing:1px;
+ background:linear-gradient(90deg,#fff,var(--cyan),#c084fc,#fff);background-size:250% auto;
+ -webkit-background-clip:text;background-clip:text;color:transparent;animation:shimmer 5s linear infinite
+}
+.logo .small{color:#7dd3fc;-webkit-text-fill-color:#7dd3fc}
+.badge{
+ display:flex;align-items:center;gap:7px;font-size:11px;font-weight:800;letter-spacing:.8px;
+ background:rgba(34,197,94,.09);border:1px solid rgba(34,197,94,.25);color:#86efac;padding:8px 12px;border-radius:999px;
+ box-shadow:0 0 20px rgba(34,197,94,.08)
+}
+.badge:before{content:"";width:7px;height:7px;background:#22c55e;border-radius:50%;box-shadow:0 0 12px #22c55e}
+.layout{display:flex;min-height:calc(100vh - 72px)}
+nav{
+ width:238px;padding:18px 12px;background:rgba(7,12,28,.68);backdrop-filter:blur(18px);
+ border-right:1px solid var(--line);position:sticky;top:72px;height:calc(100vh - 72px)
+}
+nav button{
+ display:flex;align-items:center;width:100%;text-align:left;background:transparent;color:#aebbd3;border:1px solid transparent;
+ padding:12px 14px;border-radius:10px;margin-bottom:6px;cursor:pointer;font-weight:700;transition:.25s
+}
+nav button:hover{color:#fff;background:rgba(99,102,241,.10);border-color:rgba(99,102,241,.18);transform:translateX(3px)}
+nav button.active{
+ color:#fff;background:linear-gradient(90deg,rgba(37,99,235,.32),rgba(168,85,247,.12));border-color:rgba(99,102,241,.35);
+ box-shadow:inset 3px 0 0 var(--cyan),0 8px 24px rgba(37,99,235,.10)
+}
+main{flex:1;padding:28px;max-width:1250px}
+.page{display:none;animation:pageIn .35s ease}.page.active{display:block}
+@keyframes pageIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+h1{margin:0 0 20px;font-size:27px;letter-spacing:.2px}h2{font-size:18px;margin-top:0}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.card{
+ background:linear-gradient(145deg,rgba(17,25,50,.80),rgba(9,15,31,.72));border:1px solid var(--line);
+ border-radius:16px;padding:19px;margin-bottom:16px;backdrop-filter:blur(16px);
+ box-shadow:0 15px 45px rgba(0,0,0,.20);position:relative;overflow:hidden
+}
+.card:before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent,rgba(255,255,255,.035),transparent);transform:translateX(-100%);transition:.7s}
+.card:hover:before{transform:translateX(100%)}
+.stat{transition:.25s}.stat:hover{transform:translateY(-4px);border-color:rgba(34,211,238,.28);box-shadow:0 18px 45px rgba(0,0,0,.28),0 0 25px rgba(34,211,238,.07)}
+.stat .label{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:1px}.stat .num{font-size:31px;font-weight:900;margin-top:9px}
+input,select,textarea{
+ width:100%;background:rgba(3,8,22,.72);color:#fff;border:1px solid #2b3a5a;border-radius:10px;padding:12px;margin:6px 0 12px;outline:none;transition:.2s
+}
+input:focus,select:focus,textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(34,211,238,.08)}
+textarea{min-height:90px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.small{font-size:12px;color:var(--muted)}
+button.primary,.primary{
+ background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;border:1px solid rgba(255,255,255,.10);border-radius:10px;padding:12px 16px;font-weight:800;cursor:pointer;
+ box-shadow:0 8px 25px rgba(37,99,235,.18);transition:.2s
+}
+button.primary:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(99,102,241,.28)}
+button.green{background:#14532d;color:#bbf7d0;border:1px solid #166534;border-radius:8px;padding:8px 11px;cursor:pointer}
+button.red{background:#450a0a;color:#fecaca;border:1px solid #7f1d1d;border-radius:8px;padding:8px 11px;cursor:pointer}
+button.gray{background:#1e293b;color:#cbd5e1;border:1px solid #334155;border-radius:8px;padding:8px 11px;cursor:pointer}
+table{width:100%;border-collapse:collapse;min-width:650px}th,td{text-align:left;padding:12px;border-bottom:1px solid rgba(148,163,184,.10);font-size:13px;vertical-align:middle}th{color:#8492ad;text-transform:uppercase;font-size:11px;letter-spacing:.7px}.request-table{overflow-x:auto;-webkit-overflow-scrolling:touch}.request-table table{min-width:650px}.request-table tbody tr{transition:.2s}.request-table tbody tr:hover{background:rgba(34,211,238,.035)}.request-table td:first-child{font-weight:700;color:#e5edf8}.request-table .actions{min-width:150px}.request-table .actions button{min-width:76px;font-weight:800}.request-table button.green:not(:disabled){background:#16a34a;color:#fff;border-color:#22c55e;box-shadow:0 5px 14px rgba(34,197,94,.16)}.request-table button.red:not(:disabled){background:#dc2626;color:#fff;border-color:#ef4444;box-shadow:0 5px 14px rgba(239,68,68,.14)}.request-table button:disabled{opacity:.38;cursor:not-allowed}
+.key{
+ font-family:monospace;font-size:19px;letter-spacing:2px;text-align:center;
+ background:linear-gradient(90deg,rgba(34,211,238,.07),rgba(168,85,247,.10),rgba(34,211,238,.07));background-size:250% 100%;
+ padding:14px;border:1px solid rgba(34,211,238,.20);border-radius:10px;margin:10px 0;word-break:break-all;
+ box-shadow:inset 0 0 25px rgba(34,211,238,.04);animation:shimmer 6s linear infinite
+}
+.status{font-weight:800}.pending{color:#fbbf24}.approved{color:#4ade80}.locked{color:#f87171}
+.actions{display:flex;gap:6px;flex-wrap:wrap}
+.toast{
+ position:fixed;right:20px;bottom:20px;background:rgba(15,23,42,.92);border:1px solid rgba(34,211,238,.22);
+ padding:13px 17px;border-radius:10px;display:none;backdrop-filter:blur(14px);box-shadow:0 15px 40px rgba(0,0,0,.35)
+}
+.request-card{padding:12px}.request-card .status{font-size:13px}.request-card .actions{display:flex;gap:6px;flex-wrap:nowrap}.request-card .actions button{padding:9px 12px;border-radius:8px}
+@media(max-width:900px){nav{width:72px}nav button{font-size:0;justify-content:center}nav button:before{content:"◆";font-size:13px;color:#67e8f9}.grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){header{padding:0 14px}.layout{display:block}nav{position:static;width:100%;height:auto;display:flex;overflow:auto;padding:8px;gap:5px}nav button{min-width:115px;justify-content:center;font-size:12px;margin:0}.grid,.grid2,.row{grid-template-columns:1fr}main{padding:15px}h1{font-size:23px}}
+
+.auth-screen{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(circle at 50% 30%,rgba(34,211,238,.12),transparent 35%),#030611}
+.auth-card{width:min(420px,100%);background:rgba(13,20,42,.92);border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:0 25px 80px rgba(0,0,0,.45);backdrop-filter:blur(18px)}
+.auth-card h1{margin-bottom:8px}.auth-error{color:#fca5a5;min-height:20px;font-size:13px;margin:4px 0 10px}.hidden{display:none!important}
+</style>
+
+</head>
+<body>
+<div id="authScreen" class="auth-screen">
+  <div class="auth-card">
+    <div class="logo" style="margin-bottom:14px">AI SUPER PREDICTOR <span class="small">ADMIN</span></div>
+    <h1>Admin Login</h1>
+    <p class="small">Enter the Admin Password configured in Render.</p>
+    <input id="adminPassword" type="password" placeholder="Admin password" autocomplete="current-password">
+    <div id="authError" class="auth-error"></div>
+    <button class="primary" style="width:100%" onclick="adminLogin()">Login</button>
+  </div>
+</div>
+<header><div class="logo">AI SUPER PREDICTOR <span class="small">ADMIN</span></div><div class="badge">● SYSTEM ONLINE</div></header>
+<div class="layout">
+<nav>
+<button class="active" onclick="showPage('dashboard',this)">Dashboard</button>
+<button onclick="showPage('keys',this)">Access Keys</button>
+<button onclick="showPage('users',this)">Users / Lock</button>
+<button onclick="showPage('deposit',this)">Deposit</button>
+<button onclick="showPage('withdraw',this)">Withdraw</button>
+<button onclick="showPage('subpanel',this)">Sub Panel</button>
+<button onclick="showPage('support',this)">Customer Service</button>
+</nav>
+
+<main>
+<section id="dashboard" class="page active">
+<h1>Dashboard</h1>
+<div class="grid">
+<div class="card stat"><div class="label">Total Users</div><div class="num" id="sUsers">0</div></div>
+<div class="card stat"><div class="label">Active Keys</div><div class="num" id="sKeys">0</div></div>
+<div class="card stat"><div class="label">Pending Deposit</div><div class="num" id="sDep">0</div></div>
+<div class="card stat"><div class="label">Pending Withdraw</div><div class="num" id="sWith">0</div></div>
+</div>
+<div class="card"><h2>Admin Notice</h2><p class="small">This standalone panel stores demo data in this browser. A real multi-user panel requires a secure backend/database and server-side authentication.</p></div>
+</section>
+
+<section id="keys" class="page">
+<h1>Access Key Management</h1>
+<div class="grid2">
+<div class="card"><h2>Generate New Key</h2>
+<label class="small">Validity</label><select id="keyDays"><option value="1">1 Day</option><option value="7">7 Days</option><option value="30">30 Days</option><option value="90">90 Days</option><option value="365">365 Days</option></select>
+
+<button class="primary" onclick="generateKey()">Generate Key</button>
+<div id="newKey"></div>
+</div>
+<div class="card"><h2>Key List</h2><div id="keyList"></div></div>
+</div>
+</section>
+
+<section id="users" class="page">
+<h1>Users / Account Lock</h1>
+<div class="card"><h2>Lock Account</h2>
+<div class="row"><input id="lockUid" placeholder="Enter User UID"><input id="lockReason" placeholder="Reason for lock"></div>
+<button class="red" onclick="lockUser()">Lock Account</button>
+</div>
+<div class="card"><h2>Locked Accounts</h2><div id="lockList"></div></div>
+</section>
+
+<section id="deposit" class="page">
+<h1>Deposit Requests</h1>
+<div class="card request-card"><div class="request-table"><table><thead><tr><th>UID</th><th>Amount</th><th>Method</th><th>Status</th><th>Action</th></tr></thead><tbody id="depositList"></tbody></table></div></div>
+</section>
+
+<section id="withdraw" class="page">
+<h1>Withdrawal Requests</h1>
+<div class="card request-card"><div class="request-table"><table><thead><tr><th>UID</th><th>Amount</th><th>Account</th><th>Status</th><th>Action</th></tr></thead><tbody id="withdrawList"></tbody></table></div></div>
+</section>
+
+
+
+<section id="subpanel" class="page"><h1>Sub Panel</h1><div class="grid2"><div class="card"><h2>Create Sub Panel</h2><input id="subName" placeholder="Sub panel name"><input id="subUser" placeholder="Username"><input id="subPass" type="password" placeholder="Password"><div class="small">Select permissions — only selected sections will be available after sub-panel login.</div><label><input type="checkbox" id="pKeys"> Access Keys</label><br><label><input type="checkbox" id="pUsers"> Users / Lock</label><br><label><input type="checkbox" id="pDeposit"> Deposit</label><br><label><input type="checkbox" id="pWithdraw"> Withdraw</label><br><label><input type="checkbox" id="pSupport"> Customer Service</label><br><br><button class="primary" onclick="createSubPanel()">Create Sub Panel</button><a href="subpanel.html" target="_blank" style="display:block;text-align:center;margin-top:10px;color:#67e8f9;text-decoration:none">↗ Open Sub Panel Login</a></div><div class="card"><h2>Sub Panels</h2><div id="subPanelList"></div></div></div></section>
+<section id="support" class="page">
+<h1>Customer Service</h1>
+<div class="card"><h2>Support Contact</h2><input id="supportTitle" placeholder="Service title" value="Customer Service"><input id="supportContact" placeholder="WhatsApp / Telegram / Phone"><textarea id="supportText" placeholder="Customer service message"></textarea><button class="primary" onclick="saveSupport()">Save Customer Service</button><p id="supportSaved" class="small"></p></div>
+</section>
+</main></div>
+<div id="toast" class="toast"></div>
+
+<script>
+const API_BASE="https://ai-super-predictor-backend.onrender.com";
+let adminToken=sessionStorage.getItem("asp_admin_token")||"";
+let keys=[],users=[],deposits=[],withdrawals=[],subPanels=[];
+
+function esc(v){return String(v??"").replace(/[&<>'"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[m]));}
+function toast(x){let t=document.getElementById("toast");t.textContent=x;t.style.display="block";clearTimeout(window.__toast);window.__toast=setTimeout(()=>t.style.display="none",2200)}
+async function api(path,opts={}){
+  const headers={"Content-Type":"application/json",...(opts.headers||{})};
+  if(adminToken) headers.Authorization="Bearer "+adminToken;
+  const r=await fetch(API_BASE+path,{...opts,headers});
+  let data={};try{data=await r.json()}catch(_){data={error:"Invalid server response"}}
+  if(r.status===401){adminToken="";sessionStorage.removeItem("asp_admin_token");showLogin();}
+  if(!r.ok) throw new Error(data.error||("HTTP "+r.status));
+  return data;
+}
+function showLogin(){document.getElementById("authScreen").classList.remove("hidden");document.querySelector(".layout").classList.add("hidden");document.getElementById("adminPassword").focus()}
+function showApp(){document.getElementById("authScreen").classList.add("hidden");document.querySelector(".layout").classList.remove("hidden")}
+async function adminLogin(){
+  const p=document.getElementById("adminPassword").value; const e=document.getElementById("authError"); e.textContent="";
+  if(!p)return e.textContent="Password required";
+  try{const r=await fetch(API_BASE+"/api/admin/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:p})});const d=await r.json();if(!r.ok)throw new Error(d.error||"Login failed");adminToken=d.token;sessionStorage.setItem("asp_admin_token",adminToken);document.getElementById("adminPassword").value="";showApp();await loadAll();toast("Admin login successful")}catch(err){e.textContent=err.message}}
+function logout(){adminToken="";sessionStorage.removeItem("asp_admin_token");showLogin()}
+async function loadAll(){
+  try{
+    const [k,u,d,w,sp]=await Promise.all([api("/api/access-keys"),api("/api/users"),api("/api/deposits"),api("/api/withdrawals"),api("/api/sub-panels")]);
+    keys=k.data||[];users=u.data||[];deposits=d.data||[];withdrawals=w.data||[];subPanels=sp.data||[];render();
+  }catch(e){toast(e.message)}
+}
+function showPage(id,btn){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));btn.classList.add("active");render()}
+async function generateKey(){
+  try{const days=Number(document.getElementById("keyDays").value);const r=await api("/api/access-keys",{method:"POST",body:JSON.stringify({days})});const x=r.data;document.getElementById("newKey").innerHTML='<div class="key">'+esc(x.key)+'</div><div class="small">Expires: '+new Date(x.expires_at).toLocaleString()+'</div>';await loadAll();toast("Key generated online")}
+  catch(e){toast(e.message)}
+}
+async function revokeKey(i){try{await api("/api/access-keys/"+encodeURIComponent(keys[i].id),{method:"PATCH",body:JSON.stringify({status:"disabled"})});await loadAll();toast("Key disabled") }catch(e){toast(e.message)}}
+async function lockUser(){
+  const uid=document.getElementById("lockUid").value.trim(),reason=document.getElementById("lockReason").value.trim();
+  if(!uid||!reason)return toast("UID and reason required");
+  try{await api("/api/users/"+encodeURIComponent(uid)+"/lock",{method:"PATCH",body:JSON.stringify({locked:true,reason})});document.getElementById("lockUid").value="";document.getElementById("lockReason").value="";await loadAll();toast("Account locked online")}catch(e){toast(e.message)}
+}
+async function unlockUser(uid){try{await api("/api/users/"+encodeURIComponent(uid)+"/lock",{method:"PATCH",body:JSON.stringify({locked:false})});await loadAll();toast("Account unlocked")}catch(e){toast(e.message)}}
+async function depositAction(id,ok){try{await api("/api/deposits/"+encodeURIComponent(id),{method:"PATCH",body:JSON.stringify({status:ok?"approved":"rejected"})});await loadAll();toast(ok?"Deposit approved":"Deposit rejected")}catch(e){toast(e.message)}}
+async function withdrawAction(id,ok){try{await api("/api/withdrawals/"+encodeURIComponent(id),{method:"PATCH",body:JSON.stringify({status:ok?"approved":"rejected"})});await loadAll();toast(ok?"Withdrawal approved":"Withdrawal rejected")}catch(e){toast(e.message)}}
+async function createSubPanel(){
+  const name=document.getElementById("subName").value.trim(),username=document.getElementById("subUser").value.trim(),password=document.getElementById("subPass").value;
+  if(!name||!username||!password)return toast("Name, username and password required");
+  const permissions={keys:document.getElementById("pKeys").checked,users:document.getElementById("pUsers").checked,deposit:document.getElementById("pDeposit").checked,withdraw:document.getElementById("pWithdraw").checked,support:document.getElementById("pSupport").checked};
+  try{await api("/api/sub-panels",{method:"POST",body:JSON.stringify({name,username,password,permissions})});document.getElementById("subName").value="";document.getElementById("subUser").value="";document.getElementById("subPass").value="";await loadAll();toast("Sub panel created online")}catch(e){toast(e.message)}
+}
+async function toggleSubPanel(i){try{await api("/api/sub-panels/"+encodeURIComponent(subPanels[i].id),{method:"PATCH",body:JSON.stringify({active:!subPanels[i].active})});await loadAll();toast("Sub panel updated")}catch(e){toast(e.message)}}
+async function deleteSubPanel(i){if(!confirm("Delete this sub panel?"))return;try{await api("/api/sub-panels/"+encodeURIComponent(subPanels[i].id),{method:"DELETE"});await loadAll();toast("Sub panel deleted")}catch(e){toast(e.message)}}
+function render(){
+  const locked=users.filter(x=>String(x.status||"").toLowerCase()==="locked");
+  document.getElementById("sUsers").textContent=users.length;
+  document.getElementById("sKeys").textContent=keys.filter(x=>String(x.status||"").toLowerCase()==="active"&&(!x.expires_at||new Date(x.expires_at)>new Date())).length;
+  document.getElementById("sDep").textContent=deposits.filter(x=>String(x.status||"").toLowerCase()==="pending").length;
+  document.getElementById("sWith").textContent=withdrawals.filter(x=>String(x.status||"").toLowerCase()==="pending").length;
+  document.getElementById("keyList").innerHTML=keys.length?keys.map((x,i)=>{const active=String(x.status||"").toLowerCase()==="active";return '<div class="card" style="padding:11px"><b>'+esc(x.key)+'</b><br><span class="small">UID: '+esc(x.uid||"Not assigned")+' · Expires: '+(x.expires_at?new Date(x.expires_at).toLocaleString():"No expiry")+' · '+(active?'ACTIVE':'DISABLED')+'</span><br><button class="'+(active?'red':'gray')+'" onclick="revokeKey('+i+')" style="margin-top:7px" '+(active?'':'disabled')+'>'+(active?'Disable':'Disabled')+'</button></div>'}).join(""):"<p class=small>No keys";
+  document.getElementById("lockList").innerHTML=locked.length?locked.map(x=>'<div class="card" style="padding:11px"><b>'+esc(x.uid)+'</b> <span class="locked">LOCKED</span><br><span class="small">Reason: '+esc(x.lock_reason||"-")+'</span><br><button class="green" onclick="unlockUser(\''+String(x.uid).replace(/'/g,"\\'")+'\')" style="margin-top:7px">Unlock</button></div>').join(""):"<p class=small>No locked accounts";
+  document.getElementById("depositList").innerHTML=deposits.map(x=>{const st=String(x.status||"pending").toLowerCase(),label=st.charAt(0).toUpperCase()+st.slice(1);return '<tr><td>'+esc(x.uid)+'</td><td>৳'+esc(x.amount)+'</td><td>'+esc(x.method)+'</td><td class="status '+(st==='pending'?'pending':st==='approved'?'approved':'locked')+'">'+label+'</td><td><div class="actions"><button class="green" onclick="depositAction('+Number(x.id)+',true)" '+(st!=="pending"?'disabled':'')+'>Approve</button><button class="red" onclick="depositAction('+Number(x.id)+',false)" '+(st!=="pending"?'disabled':'')+'>Reject</button></div></td></tr>'}).join("");
+  document.getElementById("withdrawList").innerHTML=withdrawals.map(x=>{const st=String(x.status||"pending").toLowerCase(),label=st.charAt(0).toUpperCase()+st.slice(1);return '<tr><td>'+esc(x.uid)+'</td><td>৳'+esc(x.amount)+'</td><td>'+esc(x.account)+'</td><td class="status '+(st==='pending'?'pending':st==='approved'?'approved':'locked')+'">'+label+'</td><td><div class="actions"><button class="green" onclick="withdrawAction('+Number(x.id)+',true)" '+(st!=="pending"?'disabled':'')+'>Approve</button><button class="red" onclick="withdrawAction('+Number(x.id)+',false)" '+(st!=="pending"?'disabled':'')+'>Reject</button></div></td></tr>'}).join("");
+  document.getElementById("subPanelList").innerHTML=subPanels.length?subPanels.map((x,i)=>'<div class="card" style="padding:12px"><b>'+esc(x.name)+'</b> <span class="'+(x.active?'approved':'locked')+'">'+(x.active?'ACTIVE':'DISABLED')+'</span><br><span class="small">Username: '+esc(x.username)+'</span><br><span class="small">Permissions: '+Object.entries(x.permissions||{}).filter(([,v])=>v).map(([k])=>esc(k)).join(", ")+'</span><br><div class="actions" style="margin-top:8px"><button class="gray" onclick="toggleSubPanel('+i+')">'+(x.active?'Disable':'Enable')+'</button><button class="red" onclick="deleteSubPanel('+i+')">Delete</button></div></div>').join(""): '<p class="small">No sub panels created.</p>';
+}
+if(adminToken){showApp();loadAll()}else showLogin();
+document.getElementById("adminPassword").addEventListener("keydown",e=>{if(e.key==="Enter")adminLogin()});
+</script>
+</body></html>
