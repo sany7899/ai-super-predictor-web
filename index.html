@@ -314,7 +314,7 @@ html,body{width:100%;min-height:100%;overflow-x:hidden}
    $('loginError').textContent='CHECKING ACCESS KEY...';
    $('unlock').disabled=true;
    try{
-     const r=await fetch(API_BASE+'/api/access-keys/check',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key,device_id:getDeviceId()});
+     const r=await fetch(API_BASE+'/api/access-keys/check',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key,device_id:getDeviceId()})});
      const d=await r.json();
      if(!r.ok || !d.valid){
        const msg=d.reason==='expired'?'ACCESS DENIED — KEY EXPIRED':d.reason==='disabled'?'ACCESS DENIED — KEY DISABLED':d.error||'ACCESS DENIED — INVALID KEY';
