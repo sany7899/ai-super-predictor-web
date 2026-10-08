@@ -286,8 +286,14 @@ html,body{width:100%;min-height:100%;overflow-x:hidden}
  let currentMethod='bKash', signalTimer=null, countdown=5, total=0, results=[];
  let configs=JSON.parse(localStorage.getItem('aiSuperPredictorMethods')||'{}');
 
- const $=id=>document.getElementById(id);
-
+ function getDeviceId(){
+  let id=localStorage.getItem('aiSuperPredictorDeviceId');
+  if(!id){
+    id=(crypto.randomUUID?crypto.randomUUID():'web-'+Date.now()+'-'+Math.random().toString(36).slice(2));
+    localStorage.setItem('aiSuperPredictorDeviceId',id);
+  }
+  return id;
+ }
  // Online access-key login. Keys are created/disabled from the Admin Panel.
  $('accessKey').addEventListener('input',e=>{
    let raw=e.target.value.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,12);
@@ -308,7 +314,7 @@ html,body{width:100%;min-height:100%;overflow-x:hidden}
    $('loginError').textContent='CHECKING ACCESS KEY...';
    $('unlock').disabled=true;
    try{
-     const r=await fetch(API_BASE+'/api/access-keys/check',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key})});
+     const r=await fetch(API_BASE+'/api/access-keys/check',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key,device_id:getDeviceId()});
      const d=await r.json();
      if(!r.ok || !d.valid){
        const msg=d.reason==='expired'?'ACCESS DENIED — KEY EXPIRED':d.reason==='disabled'?'ACCESS DENIED — KEY DISABLED':d.error||'ACCESS DENIED — INVALID KEY';
