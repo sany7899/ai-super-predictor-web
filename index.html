@@ -284,7 +284,7 @@ html,body{width:100%;min-height:100%;overflow-x:hidden}
  const API_BASE='https://ai-super-predictor-backend.onrender.com';
  const methods=['bKash','Nagad','Rocket','Upay','Stablecoins','Bank'];
  let currentMethod='bKash', signalTimer=null, countdown=5, total=0, results=[];
- let configs=JSON.parse(localStorage.getItem('aiSuperPredictorMethods')||'{}');
+ let configs={};try{configs=JSON.parse(localStorage.getItem('aiSuperPredictorMethods')||'{}')}catch(e){localStorage.removeItem('aiSuperPredictorMethods')};
   const $=id=>document.getElementById(id);
  function getDeviceId(){
   let id=localStorage.getItem('aiSuperPredictorDeviceId');
