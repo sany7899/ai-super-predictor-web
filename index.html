@@ -285,7 +285,7 @@ html,body{width:100%;min-height:100%;overflow-x:hidden}
  const methods=['bKash','Nagad','Rocket','Upay','Stablecoins','Bank'];
  let currentMethod='bKash', signalTimer=null, countdown=5, total=0, results=[];
  let configs=JSON.parse(localStorage.getItem('aiSuperPredictorMethods')||'{}');
-
+  const $=id=>document.getElementById(id);
  function getDeviceId(){
   let id=localStorage.getItem('aiSuperPredictorDeviceId');
   if(!id){
