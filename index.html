@@ -321,6 +321,7 @@ html,body{width:100%;min-height:100%;overflow-x:hidden}
        throw new Error(msg);
      }
      $('loginError').textContent='';
+     localStorage.setItem('aiSuperPredictorAccessKey',key);
      $('loginScreen').classList.add('hidden');
      $('appScreen').classList.remove('hidden');
      startSignals();
@@ -337,6 +338,7 @@ html,body{width:100%;min-height:100%;overflow-x:hidden}
    $('appScreen').classList.add('hidden');
    $('loginScreen').classList.remove('hidden');
    $('accessKey').value='';
+   localStorage.removeItem('aiSuperPredictorAccessKey');
  }
  $('logout').onclick=logout;$('bottomExit').onclick=logout;
 
@@ -427,6 +429,11 @@ html,body{width:100%;min-height:100%;overflow-x:hidden}
    loadMethod();
  };
  renderSettings();
+  const savedKey=localStorage.getItem('aiSuperPredictorAccessKey');
+if(savedKey){
+  $('accessKey').value=savedKey;
+  login();
+}
 })();
 </script>
 </body>
