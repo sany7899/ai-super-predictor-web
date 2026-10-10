@@ -286,6 +286,7 @@ html,body{width:100%;min-height:100%;overflow-x:hidden}
  let currentMethod='bKash', signalTimer=null, countdown=5, total=0, results=[];
  let configs={};try{configs=JSON.parse(localStorage.getItem('aiSuperPredictorMethods')||'{}')}catch(e){localStorage.removeItem('aiSuperPredictorMethods')};
   const $=id=>document.getElementById(id);
+  if(localStorage.getItem('aiSuperPredictorAccessKey'))$('loginScreen').style.visibility='hidden';
  function getDeviceId(){
   let id=localStorage.getItem('aiSuperPredictorDeviceId');
   if(!id){
@@ -339,6 +340,7 @@ html,body{width:100%;min-height:100%;overflow-x:hidden}
    $('loginScreen').classList.remove('hidden');
    $('accessKey').value='';
    localStorage.removeItem('aiSuperPredictorAccessKey');
+   $('loginScreen').style.visibility='visible';
  }
  $('logout').onclick=logout;$('bottomExit').onclick=logout;
 
